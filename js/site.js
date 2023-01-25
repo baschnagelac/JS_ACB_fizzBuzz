@@ -1,24 +1,22 @@
-// get the user input from the page
-//controller function -entry point 
 function getValues() {
+    let fizzValue = document.getElementById('fizzValue').value;
+    let buzzValue = document.getElementById('buzzValue').value;
+    let count = 100;
 
-    //get the values from the page
-    let startValue = document.getElementById('startValue').value;
-    let endValue = document.getElementById('endValue').value;
 
-    //parse our inputs as numbers
-    startValue = parseInt(startValue);
-    endValue = parseInt(endValue);
+    fizzValue = parseInt(fizzValue);
+    buzzValue = parseInt(buzzValue);
+    count = parseInt(count);
 
-    //verify our inputs ARE numbers
-    if (Number.isInteger(startValue) && Number.isInteger(endValue)) {
-        //if they are, generate our numbers
-        let numbersArray = generateFizzBuzz(startValue, endValue);
+    if (Number.isInteger(fizzValue) && Number.isInteger(buzzValue) && Number.isInteger(count)) {
+        let numbersArray = generateFizzBuzz(fizzValue, buzzValue, count);
 
         //then display them on the page
-        displayFizzBuzz(numbersArray);
-    } else {
+        displayFizzBuzz(numbersArray, fizzValue, buzzValue);
+
         //if they are not, tell our user!
+
+    } else {
         Swal.fire(
             {
                 icon: 'error',
@@ -26,77 +24,65 @@ function getValues() {
                 text: 'Only integers are allowed for Hundo!'
             }
         );
-    }
+        let values = generateFizzBuzz(fizzValue, buzzValue, count);
 
+        displayFizzBuzz(values);
+    }
 }
+
+
+
 
 //generate our numbers 
 //logic function
-function generateFizzBuzz(start, end) {
 
-    let numbers = [];
+function generateFizzBuzz(fizz, buzz, end) {
+    let fizzBuzzValues = [];
 
-    for (let value = start; value <= end; value++) {
-        numbers.push(value);
+    for (let i = 1; i <= end; i++) {
 
+        let value = i;
+
+        if (value % fizz == 0 && value % buzz == 0) {
+            value = 'FizzBuzz';
+        } else if (value % buzz == 0) {
+            value = 'Buzz';
+        } else if (value % fizz == 0) {
+            value = 'Fizz';
+        }
+
+        fizzBuzzValues.push(value);
     }
-
-    return numbers;
+    return fizzBuzzValues;
 }
 
-//display them on the page 
-//view function
-function displayFizzBuzz(numbersArray) {
-    let tableBody = document.getElementById('results');
 
-    let tableHtml = "";
+function displayFizzBuzz(fizzBuzzes) {
+    let resultsDiv = document.getElementById('results');
 
+    let resultsHtml = '';
 
-    for (let index = 0; index < numbersArray.length; index++) {
-        let value = numbersArray[index];
+    for (let i = 0; i < fizzBuzzes.length; i++) {
+        let fizzBuzzValue = fizzBuzzes[i];
         let className = '';
 
-        
-        
-        if (value %  15 == 0) {
-            value = "FizzBuzz";
-        }
-        if (value % 5 == 0) {
-            value = "Buzz";
-        }
-
-        if (value % 3 == 0) {
-            value = "Fizz";
+        if (fizzBuzzValue == 'Fizz') {
+            className = 'fizz';
+        } else if (fizzBuzzValue == 'Buzz') {
+            className = 'buzz';
+        } else if (fizzBuzzValue == 'FizzBuzz') {
+            className = 'fizzbuzz';
         }
 
-        
-
-
-        if (value % 2 == 0) {
-            className = 'even';
-        } else {
-            className = 'odd';
-        }
-
-
-        if (value % 5 == 0) {
-            tableHtml += '<tr>';
-        }
-
-        let tableRow = `<td class="${className}">${value}</td>`
-
-        tableHtml = tableHtml + tableRow;
-        //tableHtml += tableRow;
-
-        if ((index + 1) % 5 == 0) {
-            tableHtml += '</tr>';
-        }
-
-
+        resultsHtml += `<div class="col ${className}">${fizzBuzzValue}</div>`;
     }
-
-    tableBody.innerHTML = tableHtml;
+    resultsDiv.innerHTML = resultsHtml;
 }
+
+
+
+
+
 
 
 
